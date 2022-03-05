@@ -1,0 +1,5 @@
+const initTooltip = () => {
+
+};
+
+export {initTooltip};
