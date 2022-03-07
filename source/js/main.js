@@ -27,7 +27,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     tippy('#myButton2', {
       content: "I'm a Tippy tooltip!",
-      delay: 500, // ms
+      delay: 10500, // ms
     });
 
     initTooltip();

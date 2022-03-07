@@ -1,0 +1,58 @@
+.tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  display: flex;
+
+  pointer-events: none;
+
+  &__content {
+    position: relative;
+
+    padding: 7px 12px;
+
+    background-color: rgba(109, 119, 249, 1);
+    border-radius: 6px;
+
+    .tooltip__mark {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: calc(50% - 10px);
+      transform: translate3d(0, calc(100% - 1px), 0);
+
+      width: 20px;
+      height: 9px;
+
+      background-color: inherit;
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+    }
+  }
+
+  &__text {
+    margin: 0;
+
+    font-size: 14px;
+    line-height: 18px;
+    color: $color-default-white;
+  }
+}
+
+
+// tooltip animations ----------------
+// для анимаций указывайте transition-property
+// НЕ прописывайте transition-duration в css. его нужно указывать в js или data-tooltip-dur="n"
+
+.tooltip__content {
+  &.fade {
+    opacity: 0;
+    transition-property: opacity;
+
+    &.is-shown {
+      opacity: 1;
+    }
+  }
+}
+
+
