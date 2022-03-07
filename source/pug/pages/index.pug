@@ -20,8 +20,10 @@ block main
         p.component__description Базово тултип реагирует на наведение мыши,
           |  а так же умеет делать крутись-вертись, когда рядом нет места
         p Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus amet labore facere aspernatur dolorem alias non, nostrum distinctio rerum sit.
-        .component__content
-          +btn({text: "Hover me"})(data-tooltip="Tiny!")
+        .component__btns-row
+          +btn({text: "Hover me"})(data-tooltip="Я защищен от выпадания за край экрана")
+          +btn({text: "Hover me"})(data-tooltip="но обычно стою по центру")
+          +btn({text: "Hover me"})(data-tooltip="справа тоже защищен :)")
           //- .tooltip
           //-   .tooltip__content
           //-     p.tooltip__text Tiny tooltip!
