@@ -28,7 +28,6 @@ const settings = {
   },
   'scale': {
     animation: 'scale',
-    dev: true,
   },
 };
 
