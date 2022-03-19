@@ -9,10 +9,8 @@ const textTemplate = (text) => {
 const baseTemplate = (content, args) => {
   return (`
     <div class="tooltip">
-      <div class="tooltip__content ${args.animation}">
-        ${content.type === 'text'
-      ? textTemplate(content.el)
-      : content.el}
+      <div class="tooltip__content ${args.animation} ${args.mod ? 'tooltip__content--' + args.mod : ''}">
+        ${content}
         <div class="tooltip__mark"></div>
       </div>
     </div>
@@ -20,12 +18,6 @@ const baseTemplate = (content, args) => {
 };
 
 const body = document.querySelector('body');
-
-const defaultSettings = {
-  animation: 'fade',
-  duration: 200,
-  safePadding: 16,
-};
 
 class Tooltip {
   constructor(trigger, args) {
@@ -42,7 +34,7 @@ class Tooltip {
   }
 
   init() {
-    if (this.args.devMode) {
+    if (this.args.dev) {
       this.show();
       return;
     }
@@ -50,26 +42,21 @@ class Tooltip {
   }
 
   checkContent(trigger) {
-    // ??? -.-"
     switch ('string') {
       case (typeof trigger.dataset.text):
-        return {
-          type: 'text',
-          el: trigger.dataset.text,
-        };
+        return textTemplate(trigger.dataset.text);
       case (typeof trigger.dataset.html):
-        return {
-          type: 'html',
-          el: trigger.dataset.html,
-        };
+        return trigger.dataset.html;
+      case (typeof this.args.template):
+        return this.args.template;
       default:
-        return false;
+        throw new Error('нет контента для тултипа ~.~');
     }
   }
 
   setListener() {
     if (this.args.click) {
-      document.addEventListener('click', this.clickAction);
+      // document.addEventListener('click', this.clickAction);
     } else {
       this.trigger.addEventListener('mouseenter', this.show);
       this.trigger.addEventListener('mouseleave', this.hide);
@@ -128,35 +115,51 @@ class Tooltip {
 class Tooltips {
   constructor(selector, args) {
     this.triggers = selector.length ? [...selector] : [selector];
-    this.settings = this.checkSettings(args);
+    this.settingsKey = 'default';
+    this.settings = args;
+    this.defaultSettings = this.settings[this.settingsKey];
     this.tooltips = [];
 
     this.updateTooltips = this.updateTooltips.bind(this);
+    this.clickAction = this.clickAction.bind(this);
 
     this.init();
-    this.setUpdateOnScroll();
   }
 
   init() {
     this.triggers.forEach((trigger) => {
-      const tooltip = new Tooltip(trigger, this.settings);
+      this.getSettings(trigger);
+      const tooltip = new Tooltip(trigger, this.getSettings(trigger));
       this.tooltips.push(tooltip);
+      if (tooltip.args.click) {
+        this.clickHandler = true;
+      }
     });
-  }
 
-  checkSettings(args) {
-    if (!args) {
-      return defaultSettings;
-    }
-
-    args.safePadding = (typeof args.safePadding === 'number') ? args.safePadding : defaultSettings.safePadding;
-    args.animation = (typeof args.animation === 'string') ? args.animation : defaultSettings.animation;
-    args.duration = (typeof args.duration === 'number') ? args.duration : defaultSettings.duration;
-    return args;
+    this.setUpdateOnScroll();
+    this.setClickListener();
   }
 
   setUpdateOnScroll() {
     document.addEventListener('scroll', this.updateTooltips);
+  }
+
+  setClickListener() {
+    if (!this.clickHandler) {
+      return;
+    }
+
+    document.addEventListener('click', this.clickAction);
+  }
+
+  clickAction(e) {
+    this.tooltips.forEach((tooltip) => {
+      if (tooltip.args.click && e.target === tooltip.trigger) {
+        tooltip.show();
+      } else if (tooltip.args.click && tooltip.isOpened) {
+        tooltip.hide();
+      }
+    });
   }
 
   updateTooltips() {
@@ -165,6 +168,44 @@ class Tooltips {
         tooltip.updatePosition();
       }
     });
+  }
+
+  getSettings(trigger) {
+    const tooltipKey = trigger.dataset.tooltip;
+    if (!tooltipKey) {
+      return this.defaultSettings;
+    }
+
+    let settings = {};
+    settings.animation =
+      typeof this.settings[tooltipKey].animation === 'string'
+        ? this.settings[tooltipKey].animation
+        : this.defaultSettings.animation;
+    settings.duration =
+      typeof this.settings[tooltipKey].duration === 'number'
+        ? this.settings[tooltipKey].duration
+        : this.defaultSettings.duration;
+    settings.safePadding =
+      typeof this.settings[tooltipKey].safePadding === 'number'
+        ? this.settings[tooltipKey].safePadding
+        : this.defaultSettings.safePadding;
+    settings.dev =
+      typeof this.settings[tooltipKey].dev === 'boolean'
+        ? this.settings[tooltipKey].dev
+        : this.defaultSettings.dev;
+    settings.click =
+      typeof this.settings[tooltipKey].click === 'boolean'
+        ? this.settings[tooltipKey].click
+        : this.defaultSettings.click;
+    settings.mod =
+      typeof this.settings[tooltipKey].mod === 'string'
+        ? this.settings[tooltipKey].mod
+        : this.defaultSettings.mod;
+    settings.template =
+      typeof this.settings[tooltipKey].template === 'string'
+        ? this.settings[tooltipKey].template
+        : this.defaultSettings.template;
+    return (settings);
   }
 }
 

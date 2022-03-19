@@ -17,11 +17,6 @@
     // border-radius: 6px;
     pointer-events: all;
 
-    img {
-      height: 150px;
-      width: 150px;
-    }
-
     .tooltip__mark {
       position: absolute;
       bottom: 0;
@@ -53,9 +48,37 @@
   }
 }
 
+// mods
+
+.tooltip__content {
+  &--img {
+    display: flex;
+    align-items: center;
+    width: 350px;
+
+    .tooltip__img {
+      margin-left: 10px;
+
+      flex-shrink: 0;
+      width: 60px;
+      height: 60px;
+    }
+
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &--red {
+    background: $color-torch-red;
+  }
+}
+
 // tooltip animations ----------------
 // для анимаций указывайте transition-property
-// НЕ прописывайте transition-duration в css. его нужно указывать в js или data-tooltip-dur="n"
+// НЕ прописывайте transition-duration в css. его нужно указывать в js настройках
 
 .tooltip__content {
   &.fade {
@@ -69,7 +92,7 @@
 
   &.fib:not(.bottom) {
     opacity: 0;
-    transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -5px, 0);
     transition-property: transform opacity;
 
     &.is-shown {
@@ -81,10 +104,21 @@
   &.fib.bottom {
     opacity: 0;
     transition-property: transform opacity;
-    transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 5px, 0);
 
     &.is-shown {
       transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+
+  &.scale {
+    opacity: 0;
+    transition-property: transform opacity;
+    transform: translate3d(0, 10px, 0) scale(0);
+
+    &.is-shown {
+      transform: translate3d(0, 0, 0) scale(1);
       opacity: 1;
     }
   }

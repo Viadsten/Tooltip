@@ -1,6 +1,15 @@
 .component {
-  &__btns-row {
+  &__row {
+    margin: 40px 0 0 0 ;
     display: flex;
-    justify-content: space-between;
+    width: calc(100% + 10px);
+
+    .btn {
+      margin: 0 10px 0 0;
+    }
+
+    &.sb {
+      justify-content: space-between;
+    }
   }
 }
