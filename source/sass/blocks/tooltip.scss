@@ -10,11 +10,17 @@
   &__content {
     position: relative;
 
+    max-width: calc(100vw - 24px);
     padding: 7px 12px;
 
     background-color: rgba(109, 119, 249, 1);
-    border-radius: 6px;
+    // border-radius: 6px;
     pointer-events: all;
+
+    img {
+      height: 150px;
+      width: 150px;
+    }
 
     .tooltip__mark {
       position: absolute;
@@ -57,6 +63,28 @@
     transition-property: opacity;
 
     &.is-shown {
+      opacity: 1;
+    }
+  }
+
+  &.fib:not(.bottom) {
+    opacity: 0;
+    transform: translate3d(0, -10px, 0);
+    transition-property: transform opacity;
+
+    &.is-shown {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+
+  &.fib.bottom {
+    opacity: 0;
+    transition-property: transform opacity;
+    transform: translate3d(0, 10px, 0);
+
+    &.is-shown {
+      transform: translate3d(0, 0, 0);
       opacity: 1;
     }
   }

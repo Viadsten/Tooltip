@@ -2,7 +2,7 @@ import {iosVhFix} from './utils/ios-vh-fix';
 import {initModals} from './modules/modals/init-modals';
 import {initCustomSelect} from './modules/form/init-custom-select';
 import {initFormValidate} from './modules/form/init-form-validate';
-import {initTooltip} from './modules/tooltip/tooltip';
+import {initTooltip} from './modules/tooltip/init-tooltip';
 
 // ---------------------------------
 
@@ -22,14 +22,6 @@ window.addEventListener('DOMContentLoaded', () => {
     initModals();
     initCustomSelect();
     initFormValidate();
-    tippy('#myButton', {
-      content: "I'm a Tippy tooltip!",
-    });
-    tippy('#myButton2', {
-      content: "I'm a Tippy tooltip!",
-      delay: 10500, // ms
-    });
-
     initTooltip();
   });
 });
