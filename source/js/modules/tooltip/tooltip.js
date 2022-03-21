@@ -9,7 +9,7 @@ const textTemplate = (text) => {
 const baseTemplate = (content, args) => {
   return (`
     <div class="tooltip">
-      <div class="tooltip__content ${args.animation} ${args.mod ? 'tooltip__content--' + args.mod : ''}">
+      <div class="tooltip__content ${args.mod ? 'tooltip__content--' + args.mod : ''}">
         ${content}
         <div class="tooltip__mark"></div>
       </div>
@@ -38,7 +38,9 @@ class Tooltip {
       this.show();
       return;
     }
-    this.setListener();
+    if (!this.args.click) {
+      this.setListener();
+    }
   }
 
   checkContent(trigger) {
@@ -55,18 +57,14 @@ class Tooltip {
   }
 
   setListener() {
-    if (this.args.click) {
-      // document.addEventListener('click', this.clickAction);
-    } else {
-      this.trigger.addEventListener('mouseenter', this.show);
-      this.trigger.addEventListener('mouseleave', this.hide);
-    }
+    this.trigger.addEventListener('mouseenter', this.show);
+    this.trigger.addEventListener('mouseleave', this.hide);
   }
 
   clickAction(e) {
-    if (e.target === this.trigger) {
+    if (e.target === this.trigger && !this.args.dev) {
       this.show();
-    } else if (this.isOpened) {
+    } else if (this.isOpened && !this.args.dev) {
       this.hide();
     }
   }
@@ -81,6 +79,7 @@ class Tooltip {
     }
 
     this.updatePosition();
+    this.contentNode.classList.add(this.args.animation);
     // без таймаута css анимация отрабатывает некорректно
     setTimeout(() => {
       this.contentNode.style.transitionDuration = this.args.duration + 'ms';
@@ -123,8 +122,10 @@ class Tooltips {
     this.updateTooltips = this.updateTooltips.bind(this);
     this.clickAction = this.clickAction.bind(this);
 
+
     this.init();
-  }
+
+    this.scrollEvent = document.addEventListener('scroll', this.updateTooltips);}
 
   init() {
     this.triggers.forEach((trigger) => {
@@ -138,36 +139,6 @@ class Tooltips {
 
     this.setUpdateOnScroll();
     this.setClickListener();
-  }
-
-  setUpdateOnScroll() {
-    document.addEventListener('scroll', this.updateTooltips);
-  }
-
-  setClickListener() {
-    if (!this.clickHandler) {
-      return;
-    }
-
-    document.addEventListener('click', this.clickAction);
-  }
-
-  clickAction(e) {
-    this.tooltips.forEach((tooltip) => {
-      if (tooltip.args.click && e.target === tooltip.trigger) {
-        tooltip.show();
-      } else if (tooltip.args.click && tooltip.isOpened) {
-        tooltip.hide();
-      }
-    });
-  }
-
-  updateTooltips() {
-    this.tooltips.map((tooltip) => {
-      if (tooltip.isOpened) {
-        tooltip.updatePosition();
-      }
-    });
   }
 
   getSettings(trigger) {
@@ -206,6 +177,31 @@ class Tooltips {
         ? this.settings[tooltipKey].template
         : this.defaultSettings.template;
     return (settings);
+  }
+
+  setUpdateOnScroll() {
+  }
+
+  setClickListener() {
+    if (!this.clickHandler) {
+      return;
+    }
+
+    document.addEventListener('click', this.clickAction);
+  }
+
+  clickAction(e) {
+    this.tooltips.forEach((tooltip) => {
+      tooltip.clickAction(e);
+    });
+  }
+
+  updateTooltips() {
+    this.tooltips.map((tooltip) => {
+      if (tooltip.isOpened) {
+        tooltip.updatePosition();
+      }
+    });
   }
 }
 
