@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <title>Tooltip</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="ProjectName — описание">
+    <link rel="stylesheet" href="css/style.min.css"><script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+  </head>
+  <body>
+    <div class="visually-hidden"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><symbol id="icon-close" viewBox="0 0 20 20"><path d="M.293 18.291a1 1 0 101.414 1.414L10 11.413l8.292 8.292a1 1 0 101.414-1.414l-8.292-8.292 8.292-8.292A1 1 0 1018.291.293L9.999 8.585 1.707.293A1 1 0 10.293 1.707L8.585 10 .293 18.291z"/></symbol></svg></div>
+    <div class="wrapper">
+      <main>
+        <h1 class="visually-hidden">Компонент тултип</h1>
+        <div class="container">
+          <div class="component">
+            <h2 class="component__heading">Тултип</h2>
+            <p class="component__description">
+              Базово тултип появляется по ховеру. Защищен от выпадения по бокам экрана (настройка safePadding), а так же умеет делать крутись-вертись, когда сверху/снизу нет места</p>
+            <div class="component__row sb">
+              <button class="btn" type="button" data-tooltip data-text="Я защищен от выпадания за край экрана">Hover me</button>
+              <button class="btn" type="button" data-tooltip data-text="но обычно стою по центру">Hover me</button>
+              <button class="btn" type="button" data-tooltip data-text="справа тоже защищен :)">Hover me</button>
+            </div>
+            <div class="component__row">
+              <button class="btn" type="button" data-tooltip="click" data-text="могу по клику">click: true</button>
+            </div>
+            <p>также работает по клику</p>
+            <div class="component__row">
+              <button class="btn" type="button" data-tooltip="dev" data-text="стилизуй меня 😏">dev: true</button>
+            </div>
+            <p>Для удобства стилизации во время разработки есть параметр dev: true</p>
+            <div class="component__row">
+              <button class="btn" type="button" data-tooltip="red" data-text="Не такой как все 😎">mod: 'red'</button>
+            </div>
+            <p>нужны модификаторы для определенных тулипов?</p>
+            <p>не проблема! используй mod: 'red'. В разметке он отрендерится как .tooltip__content--red</p>
+            <div class="component__row">
+              <button class="btn" type="button" data-tooltip="scale" data-text="Вжух!">animation: 'scale'</button>
+            </div>
+            <p>Хочешь сделать стильно и модно? Добавь свою классную анимацию!</p>
+            <h2>А как быть с иконками, картинками и другой разметкой?</h2>
+            <p>Есть парочка вариантов:</p>
+            <ol>
+              <li>Если разхметка достаточно простая, то можно использовать data-html="..."
+                <div class="component__btns-row">
+                  <button class="btn" type="button" data-tooltip="img" data-html="&lt;p class='tooltip__text'&gt;Если нужно вставить разметку - делай это прямо в разметке&lt;/p&gt;&lt;div class='tooltip__img'&gt;&lt;img src='img/content/cool-cat.jpg' width='300' height='300'/&gt;&lt;/div&gt;">data-html</button>
+                </div>
+              </li>
+              <li>Можно передавать в настройках через параметр template: `<р>lorem?< /р>`
+                <div class="component__btns-row">
+                  <button class="btn" type="button" data-tooltip="template">template: '...'</button>
+                </div>
+              </li>
+              <li>//- тут добавлю ещё один способ, который будет поддерживать pug миксины</li>
+            </ol>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src="js/vendor.min.js"></script>
+    <script src="js/main.min.js"></script>
+  </body>
+</html>
